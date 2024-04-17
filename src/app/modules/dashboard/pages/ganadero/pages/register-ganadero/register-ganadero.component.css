@@ -1,0 +1,84 @@
+:host {
+  display: block;
+}
+
+
+.file-input {
+  display: none;
+}
+
+.file-upload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed black;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.file-upload::ng-deep {
+  /* Estilos para el texto dentro del div */
+  /* Por ejemplo, puedes cambiar el color del texto */
+  color: rgba(0, 0, 0, 0.5);
+  /* O cambiar la fuente */
+  font-family: Arial, sans-serif;
+  /* O aplicar otros estilos según tus necesidades */
+}
+
+.container-form {
+
+  height: fit-content;
+  overflow: hidden;
+  /* Esto activará la barra de desplazamiento cuando el contenido sea demasiado grande para caber en el contenedor */
+}
+
+
+mat-card {
+  overflow: auto;
+  /* 16px es el padding del mat-card */
+
+}
+
+li {
+  list-style: none; /* Quita los puntos de la lista */
+  padding: 0; /* Quita el relleno de la lista */
+  display: flex;
+  align-items: center; /* Alinea verticalmente */
+  justify-content: space-between; /* Distribuye uniformemente los elementos */
+  padding: 0px 8px;
+  margin: 5px 0px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+
+.custom-icon-size {
+  transform: scale(1.5);
+}
+
+
+
+.image-container:hover::after {
+  content: "Ver detalles";
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.mat-mdc-form-field {
+  margin-bottom: -15px; /* Puedes ajustar este valor según tus necesidades */
+}
+
+.container-listImage{
+  height: 86vh;
+  overflow: auto;
+}
+
+.border-red {
+  border-color: red;
+}

@@ -1,0 +1,10 @@
+<app-custom-table
+  [data]="getDataHistory()!"
+  [displayedColumns]="['ipComputer', 'fechaInicio', 'fullname' , 'accion' ]"
+  [columnNames]="{'ipComputer': 'IP', 'fechaInicio': 'Fecha/Hora', 'fullname': 'Nombre Completo' , 'accion': 'Acción Usuario'}"
+  [showColumnActions]="showColumnActions"
+  [isLoading]="isLoading"
+  (pageChange)="onPageChange($event)"
+  [title]="title"
+  >
+</app-custom-table>

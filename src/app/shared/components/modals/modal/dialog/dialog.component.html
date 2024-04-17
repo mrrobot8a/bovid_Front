@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>Añadir Nombre y Apellido </h2>
+<mat-dialog-content class="mat-typography container-form-dialog">
+  <form [formGroup]="form" autocomplete="auto" (ngSubmit)="submitForm()">
+
+    <div *ngFor="let field of objectKeys(data.campos!)" class="container-inputs">
+      <ng-container *ngIf="field === 'id'"  >
+        <input matInput type="text" [formControlName]="field" [style.display]="'none'" >
+      </ng-container>
+      <!--start input-->
+      <ng-container *ngIf="data.campos![field].tipo === 'input' && field !== 'id'">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ data.campos![field].title }}</mat-label>
+          <input matInput [formControlName]="field" [type]="hide && field ==='password' ? 'password' : 'text'"
+            autocomplete="auto">
+          <button *ngIf="field === 'password'" mat-icon-button matSuffix type="button" (click)="hide = !hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.controls[field].invalid && form.controls[field].touched">
+            Campo inválido o requerido
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+      <!--end input-->
+      <!--start textArea-->
+      <ng-container *ngIf="data.campos![field].tipo === 'textarea'">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ data.campos![field].title }}</mat-label>
+          <textarea matInput #postalCode maxlength="100" [formControlName]="field" rows="5"></textarea>
+          <mat-hint align="end">{{postalCode.value.length}} / 100</mat-hint>
+          <mat-error *ngIf="form.controls[field].invalid && form.controls[field].touched">
+            Campo inválido o requerido
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+      <!--end textArea-->
+        <!--start checkBox-->
+        <ng-container *ngIf="data.campos![field].tipo === 'checkbox'">
+          <mat-checkbox [formControlName]="field">{{ data.campos![field].title }}</mat-checkbox>
+        </ng-container>
+        <!--end checkBox-->
+        <!-- start select-->
+        <ng-container *ngIf="data.campos![field].tipo === 'select'">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ data.campos![field].title }}</mat-label>
+            <mat-select [formControlName]="field" multiple>
+              <ng-container *ngFor="let option of data.campos![field].opciones">
+                <mat-option [value]="option.valor"> {{ option.vista }} </mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+        <!-- end select-->
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="container-accions" align="center">
+  <button mat-button [mat-dialog-close]="null">Cancelar</button>
+  <button mat-button type="submit" [disabled]="form.invalid" (click)="submitForm()">Guardar</button>
+</mat-dialog-actions>

@@ -1,0 +1,10 @@
+:root {
+  --primary-color: #335AA4;
+  --secondary-color: #D73345;
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --button-color: #D73345;
+  /* Define más colores según sea necesario */
+}

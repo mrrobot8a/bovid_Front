@@ -1,0 +1,13 @@
+<app-custom-table-ganadero
+  [data]="getData()!"
+  [displayedColumns]="['firstName', 'lastName', 'ubicacion','zona' , 'acciones' ]"
+  [columnNames]="{'firstName': 'Nombre', 'lastName': 'Apellido', 'ubicacion': 'ubicacion' ,'zona':'zona', 'acciones': 'Acción Usuario'}"
+  [showColumnActions]="showColumnActions"
+  [isPosting]="isPosting()"
+  [isLoading]="isLoading()"
+  [urlNavigarion]="urlNavigarion"
+  (pageChange)="onPageChange($event)"
+  (editarEvento)="onEditar($event)"
+  [title]="title"
+  >
+</app-custom-table-ganadero>

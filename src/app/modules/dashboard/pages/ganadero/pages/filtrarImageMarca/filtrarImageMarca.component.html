@@ -1,0 +1,86 @@
+<h1>
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+
+</h1>
+
+<ng-container style="position: relative;" *ngIf="showModalLoading()">
+  <app-alert-filter></app-alert-filter>
+</ng-container>
+<div class="grid  " style="border: 2px solid black;">
+  <div class="container " style="border: 2px solid yellow;display: flex;justify-content: center;">
+
+
+    <div class="col-12 sm:col-12  d-flex row justify-content-evenly py-2 container-form "
+      style="border: 2px solid blue;">
+      <input #fileUploadImage type="file" style="display: none;" class="btn btn-primary mb-2"
+        (change)="onFileSelected($event)" accept="image/png">
+      <!--card-NUMERO1-->
+      <div class="card" style="width: 18rem; margin: 10px 0px;">
+        <div class="container-image" style="height: 200px; position: relative;">
+          <img #imagePreview class="card-img-top" src="assets/Estado joven Color.png" alt="Card image cap"
+            style="height: 100%;object-fit: contain;">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Image a buscar</h5>
+          <p class="card-text">Selecciona una imagen para buscarla en sistema.</p>
+          <div class="file-upload col-12 " style="margin: 6px 0px;">
+            <button mat-fab extended color="primary" (click)="fileUploadImage.click()" style="width: 100%;">
+              <mat-icon>add_photo_alternate</mat-icon>
+              Cargar Imagen
+            </button>
+          </div>
+        </div>
+        <!--endCard-NUmero-1-->
+
+      </div>
+      <div class="file-upload col-12 "
+        style="margin: 6px 0px; width: 200px;border: 2px solid black;display: inline-flex;align-items: center;">
+        <button mat-fab extended color="primary" (click)="onSubmited()" style="width: 100%;">
+          <mat-icon>image_search</mat-icon>
+          Buscar Imagen
+        </button>
+      </div>
+
+
+      <!--card-Numero-2-->
+      <div class="card" style="width: 18rem;margin: 10px 0px;">
+        <div class="container-image" style="height: 200px; position: relative;">
+          <img #imagePreview class="card-img-top" id="imagenResultado" src="assets/Estado joven Color.png"
+            alt="Card image cap" style="height: 100%;object-fit: contain;">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Resultados obtenidos</h5>
+          <p class="card-text">Concidencias: {{ NumbersResultados}}</p>
+
+        </div>
+        <!--EndCard-numero-2-->
+      </div>
+
+    </div>
+
+  </div>
+  <div class="container" style="margin: 10px px;">
+    <div class="title-table d-flex justify-content-center" style="font-size: 2rem;font-weight: bold;">
+      <span>RESULTADOS</span>
+    </div>
+    <app-custom-table-ganadero
+  [data]="getData()!"
+  [displayedColumns]="['nombreCompleto', 'identificacion', 'ubicacion','zona' ,'etiqueta','similitud', 'verImage' ]"
+  [columnNames]="{
+  'nombre Completo': 'nombreCompleto', 'identificacion' : 'identificacion',
+  'ubicacion': 'ubicacion' ,'zona':'zona',
+  'etiqueta': 'nombre archivo',
+  'similitud': 'similitud marca',
+  'verImage': 'Acción Usuario'}"
+  [showColumnActions]="showColumnActions"
+  [isLoading]="showModalLoading()"
+  [isPosting]="isPosting()"
+  (editarEvento)="editar($event)"
+  >
+</app-custom-table-ganadero>
+
+
+  </div>

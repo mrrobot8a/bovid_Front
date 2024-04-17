@@ -1,0 +1,58 @@
+@import url('../../../../util/colors.css');
+
+
+:host {
+  display: block;
+}
+*{
+  box-sizing: border-box;
+}
+
+.container-inputs{
+
+  padding-top: 2px;
+}
+
+
+
+
+.full-width{
+  width: 100%;
+  padding: 1px 0px;
+}
+.container-accions button:first-child {
+  background-color: var(--primary-color);
+  border:none;
+  border-radius: 10px;
+  color: white;
+  padding: 25px;
+
+}
+
+/* Selecciona el último botón, que sería "Guardar" */
+mat-dialog-actions button:last-child {
+  background-color: var(--secondary-color);
+  border:none;
+  border-radius: 10px;
+  color: white;
+  padding: 25px;
+  /* estilos para el botón Guardar */
+}
+
+
+.btn-confirm {
+  background-color: important green; /* Cambia el color de fondo del botón de confirmación */
+  color: white; /* Cambia el color del texto del botón de confirmación */
+}
+
+.btn-cancel {
+  background-color: black; /* Cambia el color de fondo del botón de cancelación */
+  color: white; /* Cambia el color del texto del botón de cancelación */
+}
+
+
+div:where(.swal2-container) h2:where(.swal2-title) {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px !important;
+  color: green !important;
+}

@@ -1,0 +1,17 @@
+<app-custom-table
+  [data]="getDataHistory()!"
+  [displayedColumns]="['fullname','email','roles', 'acciones']"
+  [columnNames]="{'fullname': 'Nombre Completo' , 'email':'Correo','roles': 'Rol','acciones': 'Acción Usuario'}"
+  [showColumnActions]="showColumnActions"
+  [camposDinamicos]="camposDinamicos"
+  [isPosting]="isPosting()"
+  [isLoading]="isLoading"
+  [isStatusSolictud]="isStatusSolicitudHttp()"
+  (pageChange)="onPageChange($event)"
+  (editarEvento)="onEditar($event)"
+  (eliminarEvento)="onEliminar($event)"
+  (onSave)="onSave($event)"
+  [title]="title"
+  >
+</app-custom-table>
+

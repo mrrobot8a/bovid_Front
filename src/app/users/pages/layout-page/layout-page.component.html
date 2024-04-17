@@ -1,0 +1,84 @@
+<!-- <div class="containerAdmin--usuarios">
+  <aside class="sidebarAdmin--usuarios" [class.mini-sidebarAdmin--usuarios]="collapsed()" (click)="collapsed.set(!collapsed())">
+  <article class="article-content">
+    <header class="headerSidebar--usuarios">
+      <div class="titulo-principal-sidebar--usuarios">
+        <h1 class="titulo-pricipal-sidebar-h1--usuarios">BOVID</h1>
+        <figure class="Logo-img-sidebar--usuarios">
+          <img src="../..//icon.svg" alt="Icono Bovid"/>
+        </figure>
+      </div>
+      <mat-label class="label-sidebar--usuarios">Administrador:<span>jhon Peralta</span></mat-label>
+    </header>
+    <main class="main-admin--usuarios">
+      <ul class="menu-admin--usuarios">
+        <div class="lista--usuarios">
+          <li>
+            <a routerLink="/AdminHome">Historial</a>
+          </li>
+          <li>
+            <a routerLink="/Usuarios">Usuarios</a>
+          </li>
+          <li>
+            <a routerLink="/Roles">Roles</a>
+          </li>
+        </div>
+      </ul>
+    </main>
+
+    <footer class="footer-sidebar">
+      <button class="botton" type="button">Salir</button>
+    </footer>
+  </article>
+</aside>
+
+
+
+</div> -->
+
+<!-- <mat-toolbar color="primary" class="mat-elevation-z3">
+  <button mat-icon-button (click)="collapsed.set(!collapsed())" [style]="{}" class="button">
+    <mat-icon *ngIf="!collapsed"> menu </mat-icon>
+    <mat-icon *ngIf="collapsed"> close </mat-icon>
+
+  </button>
+</mat-toolbar> -->
+
+<!-- <mat-sidenav-container >
+  <mat-sidenav #sidenav opened mode="side"  [style]="{width: sidenavWidth()}">
+
+    <mat-toolbar>
+      <button mat-icon-button (click)="collapsed.set(!collapsed())" [style]="{}" class="button">
+        <mat-icon *ngIf="!collapsed()"> menu </mat-icon>
+        <mat-icon *ngIf="collapsed()"> close </mat-icon>
+
+      </button>
+    </mat-toolbar>
+
+    <article class="article-content">
+      <header class="headerSidebar--usuarios">
+        <div class="titulo-principal-sidebar--usuarios">
+          <h1   [@textAnimation]="!collapsed() ? 'visible': 'hidden'" class="titulo-pricipal-sidebar-h1--usuarios">BOVID</h1>
+          <figure class="Logo-img-sidebar--usuarios">
+            <img [@widthAnimation]="!collapsed() ? 'expanded' : 'collapsed'"  src="https://source.unsplash.com/c_GmwfHBDzk/200x200" alt="Icono Bovid" />
+          </figure>
+        </div>
+        <mat-label    class="label-sidebar--usuarios">{{currentRolUser()}}<span>{{nameUserAbbreviated()}}</span></mat-label>
+      </header>
+
+      <main class="main-admin--usuarios">
+        <app-custom-sidenav [collapsed]="collapsed() "  ></app-custom-sidenav>
+      </main>
+      <footer class="footer-sidebar">
+
+        <button class="botton" type="button" > <mat-icon *ngIf="collapsed()"> logout </mat-icon><span *ngIf="!collapsed()" >salir</span></button>
+      </footer>
+    </article>
+  </mat-sidenav>
+
+  <mat-sidenav-content  class="content mat-elevation-z8" [style.margin-left]="mariginLeft()">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container> -->
+<app-custom-sidenav  ></app-custom-sidenav>

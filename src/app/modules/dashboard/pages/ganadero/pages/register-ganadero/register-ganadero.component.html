@@ -1,0 +1,137 @@
+<h1>
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  {{currentGanadero ? 'Editar Ganadero' : 'Registrar Ganadero'}}
+</h1>
+
+<mat-divider class="mb-2"></mat-divider>
+
+<div class="grid">
+
+  <div class="col-12 sm:col-6 container-form">
+    <mat-card>
+      <mat-card-content>
+
+        <form class="grid" [formGroup]="ganaderoForm" (ngSubmit)="onSubmit()">
+
+          <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Identificacion</mat-label>
+            <input matInput type="text" required formControlName="identificacion" />
+            <mat-error *ngIf="ganaderoForm.controls['identificacion']?.errors?.['required']">Nombre es
+              requerido</mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['identificacion'].errors?.['pattern']">Nombre debe contener solo
+              letras
+            </mat-error>
+          </mat-form-field>
+
+
+
+
+          <mat-form-field appearance="outline" class="col-12 sm:col-6">
+            <mat-label>Primer nombre</mat-label>
+            <input matInput type="text" required formControlName="firstName" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 sm:col-6">
+            <mat-label>Segundo nombre</mat-label>
+            <input matInput type="text" required formControlName="lastName" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Telefono</mat-label>
+            <input matInput type="tel" required formControlName="phone" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 sm:col-6">
+            <mat-label>Ubicacion</mat-label>
+            <input matInput type="text" required formControlName="ubicacion" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 sm:col-6">
+            <mat-label>Zona</mat-label>
+            <input matInput type="number" required formControlName="zona" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 sm:col-6">
+            <mat-label>Municipio</mat-label>
+            <input matInput type="text" required formControlName="municipio" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="col-12 sm:col-6">
+            <mat-label>Departamento</mat-label>
+            <input matInput type="text" required formControlName="departamento" />
+          </mat-form-field>
+
+
+          <input type="file" [style]="" class="file-input" required formControlName="documentFile"
+            (change)="onFileSelected($event)" accept=".pdf" #fileUpload>
+
+          <div class="file-upload col-12 sm:col-6" [ngClass]="{'border-red': existeDocumento}">
+
+
+            {{fileName || "subir Documento Identidad .pdf"}} &nbsp;
+
+            <button mat-mini-fab color="primary" type="button" class="upload-btn" (click)="fileUpload.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+            <p
+              *ngIf="ganaderoForm.controls['documentFile'].errors?.['required'] && ganaderoForm.controls['documentFile'].touched">
+              Archivo es requerido</p>
+          </div>
+
+          <input type="file" [style]="" class="file-input" (change)="onImageSelected($event)" accept="image/png"
+            #fileUploadImage>
+
+          <div class="file-upload col-12 " style="margin: 6px 0px; " [ngClass]="{'border-red': existeDocumento}">
+
+            {{fileNameImage || "Subir Imagenes de la marca ganadera .png"}} &nbsp;
+
+            <button mat-mini-fab color="primary" type="button" class="upload-btn" (click)="fileUploadImage.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+
+        </form>
+
+        <div class="flex justify-content-between">
+          <button *ngIf="true" (click)="onDeleteHero()" mat-flat-button color="warn">
+            Borrar
+          </button>
+          <span></span>
+
+          <button mat-flat-button color="primary" (click)="onSubmit()">
+            <mat-icon>save</mat-icon>
+            Guardar
+          </button>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="col-12 sm:col-6 container-listImage">
+    <mat-card>
+      <mat-card-content>
+        <!-- Muestra la lista de imágenes cargadas -->
+        <div class="row">
+          <div class="col-12">
+            <ng-container *ngIf="imageList.length > 0; else defaultTitle">
+              <h3>Imágenes cargadas lista:</h3>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center py-3"
+                  *ngFor="let image of imageList; let i = index">
+                  <div class="image-container" (click)="openImageModal(image.url)">
+                    <img [src]="image.url" alt="imagen" width="100" height="70">
+                  </div>
+                  <span>{{ image.size }}</span> <!-- Muestra el tamaño -->
+                  <button mat-icon-button type="button" color="warn" (click)="removeImage(i)">
+                    <mat-icon class="custom-icon-size">delete</mat-icon>
+                  </button>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-template #defaultTitle>
+              <h3>No hay imágenes cargadas</h3>
+            </ng-template>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
