@@ -3,7 +3,7 @@ import { Role } from "../../../../auth/interfaces";
 export interface UserModelTable {
   id: number;
   fullname? :String;
-  firtsName? :String;
+  firstName? :string;
   lastName? :String;
   password? :String;
   position? :String;

@@ -43,6 +43,7 @@ export interface SupportDocument {
 }
 
 export interface MarcasGanadera {
+  id: string;
   description: string;
   etiqueta: string;
   urlImage: string;

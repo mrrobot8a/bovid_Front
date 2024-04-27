@@ -5,6 +5,7 @@
 
 .file-input {
   display: none;
+  margin-top: 10px;
 }
 
 .file-upload {
@@ -19,12 +20,9 @@
 }
 
 .file-upload::ng-deep {
-  /* Estilos para el texto dentro del div */
-  /* Por ejemplo, puedes cambiar el color del texto */
   color: rgba(0, 0, 0, 0.5);
-  /* O cambiar la fuente */
   font-family: Arial, sans-serif;
-  /* O aplicar otros estilos según tus necesidades */
+  margin-top: 10px;
 }
 
 .container-form {

@@ -398,7 +398,7 @@ export class CustomTableComponent<T> implements OnInit, OnChanges, AfterViewInit
     console.log('Deleting', element);
   }
 
-  //abre el dilogo de formulario
+  //abre el dilogo de formulario PARA GUARDAR DATA
   openDialog(): void {
 
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -406,9 +406,7 @@ export class CustomTableComponent<T> implements OnInit, OnChanges, AfterViewInit
       data: this.camposDinamicos
     });
 
-    dialogRef.backdropClick().subscribe(() => {
 
-    });
 
     dialogRef.beforeClosed().subscribe(result => {
       console.log('The dialog was closed', result);
@@ -442,51 +440,4 @@ export class CustomTableComponent<T> implements OnInit, OnChanges, AfterViewInit
 }
 
 
-
-// /** Builds and returns a new User. */
-// function createNewElement(position: number): PeriodicElement {
-//   const users = ['Hydrogen', 'Helium', 'Lithium', 'Beryllium', 'Boron', 'Carbon', 'Nitrogen', 'Oxygen', 'Fluorine', 'Neon'];
-//   const ips = ['H', 'He', 'Li', 'Be', 'B', 'C', 'N', 'O', 'F', 'Ne'];
-
-//   const userIndex = Math.floor(Math.random() * users.length);
-//   const ipIndex = Math.floor(Math.random() * ips.length);
-
-//   return {
-//     user: users[userIndex],
-//     position: position,
-//     fecha: parseInt((Math.random() * 50).toFixed(4)), // Genera un valor aleatorio entre 0 y 50
-//     ip: ips[ipIndex]
-//   };
-// }
-
-// export interface PeriodicElement {
-//   user: string;
-//   position: number;
-//   fecha: number;
-//   ip: string;
-
-// }
-
-// const ELEMENT_DATA: PeriodicElement[] = [
-//   { position: 1, user: 'Hydrogen', fecha: 1.0079, ip: 'H' },
-//   { position: 2, user: 'Helium', fecha: 4.0026, ip: 'He' },
-//   { position: 3, user: 'Lithium', fecha: 6.941, ip: 'Li' },
-//   { position: 4, user: 'Beryllium', fecha: 9.0122, ip: 'Be' },
-//   { position: 5, user: 'Boron', fecha: 10.811, ip: 'B' },
-//   { position: 6, user: 'Carbon', fecha: 12.0107, ip: 'C' },
-//   { position: 7, user: 'Nitrogen', fecha: 14.0067, ip: 'N' },
-//   { position: 8, user: 'Oxygen', fecha: 15.9994, ip: 'O' },
-//   { position: 9, user: 'Fluorine', fecha: 18.9984, ip: 'F' },
-//   { position: 10, user: 'Neon', fecha: 20.1797, ip: 'Ne' },
-//   { position: 11, user: 'Sodium', fecha: 22.9897, ip: 'Na' },
-//   { position: 12, user: 'Magnesium', fecha: 24.305, ip: 'Mg' },
-//   { position: 13, user: 'Aluminum', fecha: 26.9815, ip: 'Al' },
-//   { position: 14, user: 'Silicon', fecha: 28.0855, ip: 'Si' },
-//   { position: 15, user: 'Phosphorus', fecha: 30.9738, ip: 'P' },
-//   { position: 16, user: 'Sulfur', fecha: 32.065, ip: 'S' },
-//   { position: 17, user: 'Chlorine', fecha: 35.453, ip: 'Cl' },
-//   { position: 18, user: 'Argon', fecha: 39.948, ip: 'Ar' },
-//   { position: 19, user: 'Potassium', fecha: 39.0983, ip: 'K' },
-//   { position: 20, user: 'Calcium', fecha: 40.078, ip: 'Ca' },
-// ];
 

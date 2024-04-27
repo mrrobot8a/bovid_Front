@@ -43,7 +43,7 @@ export class FiltrarImageMarcaComponent {
 
   showColumnActions: boolean = false;
   goBack() {
-    throw new Error('Method not implemented.');
+    window.history.back();
   }
 
 
@@ -177,7 +177,13 @@ export class FiltrarImageMarcaComponent {
         Swal.hideLoading();
       },
       error: (error) => {
-
+        console.log('error', error);
+        Swal.update({
+          title: 'Ocurrió un error al cargar la imagen',
+          icon: 'error',
+          text: '',
+          showCloseButton: true,
+        });
       }
     });
     // const parament = urlImage?.split('/').pop();

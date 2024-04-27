@@ -5,6 +5,7 @@ import { isAuthenticatedGuard } from './modules/auth/guards/isAuthenticated.guar
 import { isNoAuthenticatedGuardTsGuard } from './modules/auth/guards/is-noAuthenticated.guard.ts.guard';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
+import { ChangedPasswordComponent } from './modules/auth/pages/changedPassword/changedPassword.component';
 
 // dominio.com/
 // este el routing padre que gestiona las rutas hijas
@@ -19,6 +20,10 @@ const routes: Routes = [
     canActivate:[isAuthenticatedGuard],
     loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule),
 
+  },
+  {
+    path: 'change-password',
+    component: ChangedPasswordComponent,
   },
   {
     path: '404',

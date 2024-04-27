@@ -22,7 +22,7 @@ export interface Users {
 export interface Content {
   id: number;
   fullname?: string;
-  firtsName?: string;
+  firstName?: string;
   lastName?: string;
   password?: string;
   numberPhone?: string;

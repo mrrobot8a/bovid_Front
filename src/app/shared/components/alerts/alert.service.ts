@@ -40,7 +40,7 @@ export class AlertService {
       },
 
       didOpen: () => {
-        Swal.showLoading( Swal.getDenyButton());
+        Swal.showLoading(Swal.getDenyButton());
         const barProgress = Swal.getPopup()?.querySelector(".swal2-timer-progress-bar") as HTMLElement;
 
         barProgress!.style.backgroundColor = "red";
@@ -62,7 +62,7 @@ export class AlertService {
   }
 
 
-  public alertNotificationProgress(options: { title: string, icon: any, message: string, duration?: number, position?: any }) {
+  public alertNotificationProgress(options: { title: string, icon: any, message: string, duration?: number, position?: any, color?: any }) {
 
     const Toast = Swal.mixin({
       toast: true,
@@ -76,7 +76,7 @@ export class AlertService {
       didOpen: (toast) => {
         const barProgress = Swal.getPopup()?.querySelector(".swal2-timer-progress-bar") as HTMLElement;
 
-        barProgress!.style.backgroundColor = "red";
+        barProgress!.style.backgroundColor = options.color ? options.color : "red";
         toast.onmouseleave = Swal.resumeTimer;
       }
 

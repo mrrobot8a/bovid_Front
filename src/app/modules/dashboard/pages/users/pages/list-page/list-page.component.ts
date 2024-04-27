@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import { mapRoleFromApiToRole } from '../../../roles/helper/mappers/role.mappers';
 import { UserModelTable } from '../../interface';
 import e from 'express';
+import { RoleService } from '../../../roles/service/role.service';
+import { Content } from '../../../roles/interface/role_pegination_response.interface';
 
 
 @Component({
@@ -17,9 +19,33 @@ import e from 'express';
   templateUrl: './list-page.component.html',
   styles: ``
 })
-export class ListPageComponent implements OnInit, OnDestroy{
+export class ListPageComponent implements OnInit, OnDestroy {
 
-  constructor(private _userService: UserService) { }
+  constructor(private _userService: UserService, private _roleService: RoleService) {}
+
+
+
+
+
+  private loadRolesAndInitForm(): void {
+    this.subscription.add(
+      this._roleService.getAllRoles(this.pageIndex, this.pageSize).subscribe({
+        next: (response) => {
+          const rolesActivos = mapToRoleSelectTipoUsuario(response.roles.content);
+          console.log('rolesActivos:', rolesActivos );
+          // Ajustar el formato de rolesActivos para que coincida con lo que espera opciones
+          // Ajustar el formato de rolesActivos para que coincida con lo que espera opciones
+          this.camposDinamicos!.campos!['roles'].opciones! = rolesActivos.map(rol => ({
+            valor: rol.valor || '',
+            vista: rol.valor || ''
+          }));
+        },
+        error: (error) => { console.error('Error fetching roles:', error); }
+      })
+    );
+  }
+
+  rolesActivos = signal<TipoUsuario[]>([]);
 
   title: string = 'Lista de usuarios';
   // subscription para desuscribirse al destruir el componente
@@ -48,7 +74,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
 
   //validaciones de los campos del formulario
   readonly configuracionDelFormulario = {
-    firtsName: ['', [Validators.required, Validators.minLength(6)]],
+    firstName: ['', [Validators.required, Validators.minLength(6)]],
     lastName: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(2)]],
@@ -56,7 +82,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
     position: ['', [Validators.required, Validators.minLength(2)]],
     numberPhone: ['', [Validators.required, Validators.minLength(10)]],
     enabled: [true, Validators.required],
-    id: ['defaulvalor']
+    id: ['']
 
 
 
@@ -64,11 +90,11 @@ export class ListPageComponent implements OnInit, OnDestroy{
   // Campos dinámicos del formulario de registro de usuario
   readonly camposDinamicos: DialogData = {
     campos: {
-      id:{
+      id: {
         title: 'id',
         tipo: 'input',
       },
-      firtsName: {
+      firstName: {
         title: 'Nombre Completo',
         tipo: 'input',
       },
@@ -119,6 +145,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     console.log('listuser');
     this.loadHistoryData({ pageIndex: this.pageIndex, pageSize: this.pageSize });
+    this.loadRolesAndInitForm();
   }
 
   ngOnDestroy(): void {
@@ -144,7 +171,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
 
   }
 
-  onSave(event:UserModelTable ) {
+  onSave(event: UserModelTable) {
     console.log('event:', event);
     event.roles = mapRoleFromApiToRole(event.roles);
     console.log('event:', event);
@@ -152,7 +179,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
   }
 
 
-  private _saveUser(user:any) {
+  private _saveUser(user: any) {
     console.log('saveUser:', user);
 
 
@@ -168,7 +195,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
           if (response && response.user) { // Asumiendo que la respuesta tiene un campo `user`
             // Preparar el nuevo usuario para agregarlo al principio de la lista
             const newUser = mapToUserModelTable([response.user])[0]; // Asume que tu función puede manejar arrays y devuelve un array
-          console.log('newUser:', newUser);
+            console.log('newUser:', newUser);
             // Obtener la lista actual de usuarios y agregar el nuevo usuario al principio
             const currentUsers = this._data() ? this._data().slice() : [];
             currentUsers.unshift(newUser); // Añade al principio
@@ -188,16 +215,16 @@ export class ListPageComponent implements OnInit, OnDestroy{
           console.error('Error fetching history:', error);
 
           // Establecer un retraso antes de mostrar la alerta
-          setTimeout(() => {
-            Swal.fire({
-              title: 'Error',
-              text: error,
-              icon: 'error',
-              showConfirmButton: false,
-              allowOutsideClick: false,
-              timer: 2500
-            });
-          }, 5000);
+
+          Swal.update({
+            title: 'Error',
+            text: error,
+            icon: 'error',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            showCloseButton: true,
+          });
+
 
           this.isLoading = false;
           this.formStatus.set(FormStatus.isPostingFailed);
@@ -224,6 +251,37 @@ export class ListPageComponent implements OnInit, OnDestroy{
         },
         error: (error) => {
           console.log('Error fetching history:', error);
+          localStorage.clear();
+          if (error.status === 0 || error.message === "Error en el servidor") {
+            Swal.fire({
+              title: 'Error',
+              text: 'Error en el servidor , intentelo mas tarde...',
+              icon: 'error',
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              showCloseButton: true,
+            });
+          }
+          if(error.status === 400){
+            Swal.fire({
+              title: 'Error',
+              text: error.error.message,
+              icon: 'error',
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              showCloseButton: true,
+            });
+          }
+          if(error.status === 403){
+            Swal.fire({
+              title: 'Error',
+              text: 'Vuelva a iniciar sesión...',
+              icon: 'error',
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              showCloseButton: true,
+            });
+          }
           this.isLoading = false;
         }
       }));
@@ -241,7 +299,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
     // Lógica para manejar la edición
   }
 
-  private _editUser(user:any){
+  private _editUser(user: any) {
     console.log('saveUser:', user);
     this._statusData.set(true);
     this.isLoading = true;
@@ -266,7 +324,7 @@ export class ListPageComponent implements OnInit, OnDestroy{
 
               // Actualizar la señal con la nueva lista de usuarios
               this._data.set(currentUsers);
-          }
+            }
 
             this.formStatus.set(FormStatus.isPostingSuccessfully);
             this.isLoading = false;
@@ -304,5 +362,23 @@ export class ListPageComponent implements OnInit, OnDestroy{
     console.log('Eliminar DESDE EL PADRE:', row);
     // Lógica para manejar la eliminación
   }
+
+}
+
+
+
+export interface TipoUsuario {
+  valor?: string;
+  vista?: string;
+}
+
+export function mapToRoleSelectTipoUsuario(data: Content[]): TipoUsuario[] {
+
+  return data.map((item) => ({
+    valor: item.authority,
+    vista: item.description,
+  }));
+
+
 
 }

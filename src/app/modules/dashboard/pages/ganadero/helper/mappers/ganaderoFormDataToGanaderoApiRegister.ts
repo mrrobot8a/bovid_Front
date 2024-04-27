@@ -23,6 +23,7 @@ export function mapToContent(jsonData: string): Content {
 
 
   const marcasGanadera: MarcasGanadera = {
+    id: data.idMarca,
     description: data.ubicacion,
     etiqueta: '',
     urlImage: '',
@@ -54,6 +55,7 @@ interface DataFormGandero {
   zona: number;
   identificacion: string;
   phone: string;
+  idMarca: string;
   municipio: string;
   departamento: string;
   documentFile: string;

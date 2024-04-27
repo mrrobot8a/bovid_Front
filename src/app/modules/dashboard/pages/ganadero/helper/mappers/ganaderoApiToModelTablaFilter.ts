@@ -6,6 +6,7 @@ export interface GanaderoResultante {
   identificacion: string;
   etiqueta: string;
   similitud: string;
+  idMarca?: string;
   departamento?: string;
   municipio?: string;
   ubicacion?: string;

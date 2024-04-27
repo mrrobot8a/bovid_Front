@@ -43,19 +43,34 @@ export class LoginPageComponent {
   login() {
     //desestructuramos el objeto para obtener el email y el password
     const { email, password } = this.loginForm.value;
-    this.isLoading=true;
+    this.isLoading = true;
     //llamamos al metodo login del servicio AuthService
     this.authService.login(email, password).subscribe({
       next: (resp) => {
         console.log(resp);
-        this.isLoading=false;
-        // this.router.navigateByUrl('dashboard/users');
+        this.isLoading = false;
+
+        if (resp.status === 403) {
+          this.alert.alertNotificationProgress({
+            title: "Error", icon: 'error', message: resp.error, duration: 5000
+            , position: 'top-end'
+          });
+          return;
+        }
+        if (this.tieneRolUsuario(resp)) {
+          console.log('user', resp)
+          this.router.navigateByUrl('dashboard/users/list');
+        } else {
+          console.log('admin', resp)
+          this.router.navigateByUrl('dashboard/ganadero/list');
+
+        }
 
       },
       //capturamos el error que nos devuelve el observable throwError
       error: (error: LoginResponse | any) => {
         console.log({ loginError: error });
-        this.isLoading=false;
+        this.isLoading = false;
         this.alert.alertNotificationProgress({
           title: "Error", icon: 'error', message: error, duration: 5000
           , position: 'top-end'
@@ -67,10 +82,11 @@ export class LoginPageComponent {
 
 
 
-    console.log(this.loginForm.value);
-    console.log(this.loginForm.invalid);
   }
 
+  tieneRolUsuario(usuario: any) {
+    return usuario?.roles?.some((rol: any) => rol.authority.toLowerCase() === 'administrador') || false;
+  }
 
 
   // checkAuthentication(): Observable<boolean> {

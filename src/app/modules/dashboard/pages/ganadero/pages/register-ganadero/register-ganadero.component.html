@@ -19,10 +19,13 @@
           <mat-form-field appearance="outline" class="col-12">
             <mat-label>Identificacion</mat-label>
             <input matInput type="text" required formControlName="identificacion" />
-            <mat-error *ngIf="ganaderoForm.controls['identificacion']?.errors?.['required']">Nombre es
+            <mat-error *ngIf="ganaderoForm.controls['identificacion']?.errors?.['required']">identificacion es
               requerido</mat-error>
             <mat-error *ngIf="ganaderoForm.controls['identificacion'].errors?.['pattern']">Nombre debe contener solo
-              letras
+              numeros
+            </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['identificacion'].errors?.['minlength']">
+              Identificacion debe contener al menos 10 digitos
             </mat-error>
           </mat-form-field>
 
@@ -30,36 +33,66 @@
 
 
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
-            <mat-label>Primer nombre</mat-label>
+            <mat-label>Nombres</mat-label>
             <input matInput type="text" required formControlName="firstName" />
+            <mat-error *ngIf="ganaderoForm.controls['firstName']?.errors?.['required']">dato requerido
+            </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['firstName'].errors?.['pattern']">Nombres debe contener solo
+              letras
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
-            <mat-label>Segundo nombre</mat-label>
+            <mat-label>Apellidos</mat-label>
             <input matInput type="text" required formControlName="lastName" />
+            <mat-error *ngIf="ganaderoForm.controls['lastName']?.errors?.['required']">dato requerido
+            </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['lastName'].errors?.['pattern']">Nombres debe contener solo
+              letras
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12">
             <mat-label>Telefono</mat-label>
             <input matInput type="tel" required formControlName="phone" />
+            <mat-error *ngIf="ganaderoForm.controls['phone'].errors?.['minlength']">
+              Telefono debe contener al menos 10 digitos
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Ubicacion</mat-label>
             <input matInput type="text" required formControlName="ubicacion" />
+            <mat-error *ngIf="ganaderoForm.controls['ubicacion']?.errors?.['required']">dato requerido
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Zona</mat-label>
-            <input matInput type="number" required formControlName="zona" />
+            <input matInput type="text" required formControlName="zona" />
+            <mat-error *ngIf="ganaderoForm.controls['zona']?.errors?.['required']">dato requerido
+            </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['zona'].errors?.['pattern']">solo numeros
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Municipio</mat-label>
             <input matInput type="text" required formControlName="municipio" />
+            <mat-error *ngIf="ganaderoForm.controls['municipio']?.errors?.['required']">dato requerido
+            </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['municipio'].errors?.['pattern']">Nombres debe contener solo
+              letras
+            </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Departamento</mat-label>
             <input matInput type="text" required formControlName="departamento" />
+            <mat-error *ngIf="ganaderoForm.controls['departamento']?.errors?.['required']">dato requerido
+            </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['departamento'].errors?.['pattern']">Nombres debe contener solo
+              letras
+            </mat-error>
           </mat-form-field>
 
+          <!--contenedor de inputs files-->
 
-          <input type="file" [style]="" class="file-input" required formControlName="documentFile"
+          <input type="file" style="margin-top: 20px;" class="file-input" required formControlName="documentFile"
             (change)="onFileSelected($event)" accept=".pdf" #fileUpload>
 
           <div class="file-upload col-12 sm:col-6" [ngClass]="{'border-red': existeDocumento}">
@@ -90,12 +123,10 @@
         </form>
 
         <div class="flex justify-content-between">
-          <button *ngIf="true" (click)="onDeleteHero()" mat-flat-button color="warn">
-            Borrar
-          </button>
+
           <span></span>
 
-          <button mat-flat-button color="primary" (click)="onSubmit()">
+          <button mat-flat-button style="background-color: #f9001d;color: white;" (click)="onSubmit()">
             <mat-icon>save</mat-icon>
             Guardar
           </button>

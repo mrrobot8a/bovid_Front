@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FormStatus } from '../../../users/interface/form_status.enum';
 import { GanaderoService } from '../../service/ganadero.service';
 import { mapToGanaderoModelTable } from '../../helper/mappers/ganaderoToganaderoModelTable';
 import { NavigationExtras, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -56,6 +57,7 @@ export class ListGanaderoComponent implements OnInit, OnDestroy {
   showColumnActions = true;
 
 
+
   onPageChange(event: { pageIndex: number, pageSize: number, lastPage: number, totalPages: number }) {
     // Actualizar pageIndex y pageSize con los nuevos valores
     this.pageIndex = event.pageIndex;
@@ -105,6 +107,7 @@ export class ListGanaderoComponent implements OnInit, OnDestroy {
   onEditar(event: any) {
     console.log('Editar Ganadero:', event);
     // Crear un objeto con los parámetros que deseas pasar a la ruta de edición
+    // localStorage.setItem('ganadero', JSON.stringify(event));
     const parametros: NavigationExtras = {
       state: {
         ganadero: event  // Pasar el objeto event como parte del estado de navegación
@@ -115,5 +118,49 @@ export class ListGanaderoComponent implements OnInit, OnDestroy {
 
   }
 
+  onViewFileImage(event: any) {
+    console.log('event', event);
 
+    const { urlImage } = event;
+
+    Swal.fire({
+      title: 'Cargando Imagen',
+      html: 'Por favor, espere un momento',
+      timerProgressBar: true,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+
+    this.ganaderoService.getImageFile(urlImage!.split('/').pop()!).subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'image/png' });
+        const url = window.URL.createObjectURL(blob);
+        Swal.update({
+          text: 'Marca Ganadera',
+          html: '',
+          title: '',
+          imageUrl: url,
+          imageWidth: 400,
+          imageHeight: 330,
+          showCloseButton: true,
+
+        });
+        Swal.hideLoading();
+      },
+      error: (error) => {
+        console.log('Error fetching image:', error);
+        Swal.update({
+          title: 'Ocurrió un error al cargar la imagen  ',
+          icon: 'error',
+          text: 'Intente nuevamente',
+          html: '',
+          showCloseButton: true,
+        });
+      }
+    });
+  }
 }

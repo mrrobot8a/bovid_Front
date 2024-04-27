@@ -21,7 +21,7 @@ export class RoleService {
   private AuthService = inject(AuthService);
   private http = inject(HttpClient);
 
-  public getAllRoles(page?: number, size: number = 30): Observable<any> {
+  public getAllRoles(page?: number, size?: number): Observable<any> {
     return this.tokenService.getToken().pipe(
       switchMap(token => {
         if (token == null) {

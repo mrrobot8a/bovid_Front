@@ -101,11 +101,12 @@ export class RegisterGanaderoComponent implements OnInit {
   existeDocumento = false;
   public ganaderoForm = this.fb.group({
     id: [''],
+    idMarca:[''],
     firstName: ['', Validators.pattern('^[a-zA-Z ]*$')],
     lastName: ['', [Validators.pattern('^[a-zA-Z ]*$'), Validators.required]],
-    ubicacion: ['', Validators.pattern('^[a-zA-Z ]*$')],
+    ubicacion: ['',[Validators.pattern('^[a-zA-Z ]*$'),Validators.required]],
     zona: ['', [Validators.required, Validators.pattern('^[0-9]*$')],],
-    identificacion: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+    identificacion: ['', [Validators.required, Validators.pattern('^[0-9]*$'),Validators.minLength(10)]],
     phone: ['', Validators.minLength(10)],
     municipio: ['', Validators.pattern('^[a-zA-Z ]*$')],
     departamento: ['', Validators.pattern('^[a-zA-Z ]*$')],
@@ -159,13 +160,19 @@ export class RegisterGanaderoComponent implements OnInit {
       const ganaderoEditLocalStorage = localStorage.getItem('ganaderoEdit');
       if (window.history.state.ganadero || ganaderoEditLocalStorage) {
         let ganadero = window.history.state.ganadero;
+        console.log('ganadero:', ganadero);
+        console.log('ganaderoEditLocalStorage:', window.history.state.ganadero);
 
         if (!ganaderoEditLocalStorage) {
+          console.log('Guardando en localStorage', ganadero);
+          // Convertir el valor de zona a cadena antes de guardar el objeto
+          ganadero.zona = ganadero.zona.toString();
+          console.log('Guardando en localStorage', ganadero);
           localStorage.setItem('ganaderoEdit', JSON.stringify(ganadero));
-        }
+      }
 
         this.ganaderoForm.reset(ganadero ? ganadero : JSON.parse(ganaderoEditLocalStorage!));
-        console.log('Objeto Ganadero:', ganadero);
+        console.log('Objeto Ganadero:', ganaderoEditLocalStorage);
         console.log('ganadero:', this.router.getCurrentNavigation()?.extras.state?.['ganadero']);
         // Aquí puedes usar el objeto ganadero según tus necesidades en la vista de edición
       }
@@ -180,8 +187,11 @@ export class RegisterGanaderoComponent implements OnInit {
 
 
   onSubmit(): void {
+    console.log('documenFile', this.documentFile);
+    console.log('listImageFile', this.listImageFile);
+    console.log('ganaderoForm:', this.ganaderoForm.value.id);
 
-    if ((this.documentFile === null || this.documentFile === undefined) && this.ganaderoForm.value.id === null) {
+    if ((this.documentFile === null || this.documentFile === undefined || this.listImageFile.length === 0)&& !this.ganaderoForm.value.id) {
       this.existeDocumento = true;
 
       this.snackbar.open('Por favor, adjunte un archivos requeridos', 'Cerrar', {
@@ -196,32 +206,44 @@ export class RegisterGanaderoComponent implements OnInit {
       formData.delete('images');
       formData.delete('fileDocument');
       formData.delete('ganadero');
+      const ganaderoValueFrom = this.ganaderoForm.value;
+      console.log('ganaderoValueFrom:', ganaderoValueFrom);
       const ganaderoApi = mapToContent(JSON.stringify(this.ganaderoForm.value));
       formData.append('ganadero', JSON.stringify(ganaderoApi));
       formData.append('fileDocument', this.documentFile!);
       formData.append('images', this.listImageFile[0]);
 
-      console.log('Editar Ganadero:', formData.getAll('ganadero'));
-      console.log('Editar Ganadero:', formData.getAll('fileDocument'));
-      console.log('Editar Ganadero:', formData.getAll('images'));
+      this.showConfirmDialog({
+        title: '¿Estás seguro?',
+        text: 'No podrás revertir esta acción',
+        icon: 'warning', confirmButtonText: 'Enviar Solicitud',
+        showCancelButton: true, cancelButtonText: 'Cancelar'
+      }).then((result) => {
 
-      this.ganaderoService.updateGanadero(formData).subscribe({
-        next: (resp) => {
-          console.log(resp);
-          this.showSnackbar('Ganadero actualizado con éxito');
-          this.router.navigate(['/dashboard/ganadero']);
-        },
-        error: (error: any) => {
-          console.log({ error });
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al enviar la solicitud',
-            text: 'Por favor, intente de nuevo',
-            timer: 3000,
-            showCloseButton: true,
+        if (result) {
+          this.showGuardando();
+          this.ganaderoService.updateGanadero(formData).subscribe({
+            next: (resp) => {
+              console.log(resp);
+              Swal.close();
+              this.showSnackbar('Ganadero actualizado con éxito');
+              this.router.navigate(['/dashboard/ganadero']);
+            },
+            error: (error: any) => {
+              console.log({ error });
+              Swal.fire({
+                icon: 'error',
+                title: 'Error al enviar la solicitud',
+                text: 'Por favor, intente de nuevo',
+                timer: 3000,
+                showCloseButton: true,
+              });
+            }
           });
         }
       });
+
+
 
       console.log('Editar Ganadero:', this.ganaderoForm.value);
       return;
@@ -308,8 +330,11 @@ export class RegisterGanaderoComponent implements OnInit {
         icon: option.icon as SweetAlertIcon, // Fix: Cast option.icon to SweetAlertIcon
         showCancelButton: true,
         confirmButtonText: 'Confirmar',
+        confirmButtonColor: "#D73345",
         cancelButtonText: 'Cancelar',
-        allowOutsideClick: false
+        cancelButtonColor: "#335AA4",
+        allowOutsideClick: false,
+
       });
 
       return result.isConfirmed;

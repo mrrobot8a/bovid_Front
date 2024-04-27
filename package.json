@@ -55,7 +55,6 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "localstorage-polyfill": "^1.0.1",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3",
     "typescript": "~5.3.2"
   }
 }

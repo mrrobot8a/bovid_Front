@@ -5,7 +5,7 @@ export function mapToHistorialModelTable(data: Session[]): HistorialModelTable[]
   return data.map((item) => ({
     ipComputer: item.ipComputer,
     fechaInicio: formatFechaWithAMPM(item.fechaIncio), // Asegúrate de corregir la ortografía si fue un error
-    fullname: item.users.firtsName + ' ' + item.users.lastName,
+    fullname: item.users.firstName + ' ' + item.users.lastName,
     accion:item.accion,
   }));
 }

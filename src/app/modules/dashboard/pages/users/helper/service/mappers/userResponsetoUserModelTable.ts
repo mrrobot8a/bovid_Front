@@ -22,7 +22,7 @@ export function mapToUserModelTable(data: Content[]): UserModelTable[] {
 
   return data.map((item) => ({
     id: item.id,
-    firtsName: item.firtsName,
+    firstName: item.firstName,
     lastName: item.lastName,
     email: item.email,
     password: EncryptionService.decryptData(item.password!),

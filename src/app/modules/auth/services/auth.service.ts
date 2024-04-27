@@ -1,4 +1,4 @@
-import { Injectable, computed, PLATFORM_ID, inject, signal, Inject, AfterViewInit } from "@angular/core";
+import { Injectable, computed, PLATFORM_ID, inject, signal, Inject, AfterViewInit, OnInit } from "@angular/core";
 
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, catchError, delay, map, of, tap, throwError } from "rxjs";
@@ -11,7 +11,8 @@ import { decodeToken, mapTokenToUser, hasTokenExpired } from '../helper/decode-t
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements AfterViewInit {
+export class AuthService implements AfterViewInit, OnInit {
+
 
   // readonly para evitar que se modifique el valor de la variable en tiempo de ejecución
   // exponemos la base url para que sea accesible desde cualquier componente
@@ -30,11 +31,12 @@ export class AuthService implements AfterViewInit {
   private readonly platformId = inject(PLATFORM_ID);
 
 
-  constructor(
-
-
-  ) {
+  constructor() {
+    console.log('1')
     this.checkAuthentication().subscribe();
+  }
+
+  ngOnInit(): void {
 
   }
 
@@ -48,12 +50,12 @@ export class AuthService implements AfterViewInit {
     const token = this.runOnClient();
     const tokenDecoded = hasTokenExpired(token!);
 
-    if (token == null) {
-      console.log('actulizar set checkAuthstatus')
-      this._setAuthentication(null, '', AuthStatus.notAuthenticated);
-      console.log('checking:service: ', this._authStatus());
-      return of(false);
-    }
+    // if (token == null) {
+    //   console.log('actulizar set checkAuthstatus')
+    //   this._setAuthentication(null, '', AuthStatus.notAuthenticated);
+    //   console.log('checking:service: ', this._authStatus());
+    //   return of(false);
+    // }
 
     if (!tokenDecoded) {
       return of(true).pipe(
@@ -68,13 +70,16 @@ export class AuthService implements AfterViewInit {
     }
 
     const url = `${this.baseUrl}/auth/refresh-token`;
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}` // Corregir el uso de template literals
     });
 
     const result = this.http.get<CheckTokenResponse>(url, { headers }).pipe(
+
       delay(3000),
+
       map(({ user, token }) => {
         console.log(this._authStatus())
         return this._setAuthentication(user, token, AuthStatus.authenticated);
@@ -96,7 +101,7 @@ export class AuthService implements AfterViewInit {
   }
 
 
-  public login(email: string, password: string): Observable<boolean> {
+  public login(email: string, password: string): Observable<any> {
 
     const url = `${this.baseUrl}/auth/sign-in`;
     const body = { email, password };
@@ -104,9 +109,15 @@ export class AuthService implements AfterViewInit {
     //pipe nos permite encadenar operadores de rxjs
     const result = this.http.post<LoginResponse>(url, body).pipe(
       delay(3000),
-      tap((resp) => console.log(resp.message, 'resp')),
-      map(({ user, token }) => {
-        return this._setAuthentication(user, token, AuthStatus.authenticated);
+      tap((resp) => console.log(resp, 'resp')),
+      map((resp) => {
+        if (resp.status === 403) {
+          return resp;
+        }
+
+        const { user, token } = resp;
+        this._setAuthentication(user, token, AuthStatus.authenticated);
+        return user;
       }),
       //nos permite capturar el error que nos devuelve la peticion http
       catchError((error: LoginResponse | any) => {
@@ -114,9 +125,10 @@ export class AuthService implements AfterViewInit {
         if (error.status === 0) {
           return throwError(() => 'No se pudo conectar al servidor. Por favor, intenta de nuevo más tarde.');
         }
-        if(error.status === 401){
+        if (error.status === 401) {
           return throwError(() => 'Usuario o contraseña incorrectos');
         }
+        if (error.status === 403) { }
         const { success, error: errorMessage } = error.error;
         console.log(errorMessage, 'error')
 
@@ -132,7 +144,7 @@ export class AuthService implements AfterViewInit {
     const token = this.runOnClient();
     console.log(token, 'token');
     if (!token) return of({ 'success': false });
-
+    console.log('logout')
     const url = `${this.baseUrl}/auth/sign-out`;
 
     // Configurando correctamente los encabezados HTTP.
@@ -144,12 +156,14 @@ export class AuthService implements AfterViewInit {
     // Asegúrate de pasar los encabezados como parte de las opciones en el tercer argumento de la llamada POST.
     const result = this.http.post<LoginResponse>(url, {}, { headers }).pipe(
       tap(({ message, error }) => {
-         console.log('logout', message, error);
+        console.log('logout', message, error);
         this._setAuthentication(null, '', AuthStatus.notAuthenticated);
       }),
       map(resp => resp),
       catchError((error: LoginResponse | any) => {
+        console.log(error, 'error')
         if (error.status === 0) {
+          this._setAuthentication(null, '', AuthStatus.notAuthenticated);
           return throwError(() => 'No se pudo conectar al servidor. Por favor, intenta de nuevo más tarde.');
         }
         const { success, error: errorMessage } = error.error;
@@ -162,8 +176,59 @@ export class AuthService implements AfterViewInit {
     return result;
   }
 
+  public changePassword(email: any, newPassword: any, confirmPassword: any, token: string): Observable<any> {
+    //primero construyes la url F
+    const url = `${this.baseUrl}/auth/reset-password?token=${token}`;
+    //creas un objeto con los datos que se enviaran al servidor
+    const body = { email, newPassword };
+    //loginresponse es el  modelo que nos devuelve el servidor json
+    const result = this.http.post<any>(url, body).pipe(
+      delay(3000),
+      map((resp) => resp),
+      catchError((error: LoginResponse | any) => {
+        console.log(error, 'error')
+        if (error.status === 0) {
+          return throwError(() => 'No se pudo conectar al servidor. Por favor, intenta de nuevo más tarde.');
+        }
+        if (error.status === 401) {
+          return throwError(() => 'Usuario o contraseña incorrectos');
+        }
+        const { success, error: errorMessage } = error.error;
+        console.log(errorMessage, 'error')
 
+        return throwError(() => errorMessage);
+      }),
+    );
 
+    return result;
+  }
+
+  public resetPassword(email: any): Observable<any> {
+
+    const url = `${this.baseUrl}/auth/password-reset-request`;
+    const body = { email };
+    //loginresponse es el  modelo que nos devuelve el servidor json
+    const result = this.http.post<any>(url, body).pipe(
+      delay(3000),
+      tap((resp) => console.log(resp, 'resp')),
+      map((resp) => resp),
+      catchError((error) => {
+        console.log(error, 'error')
+        if (error.status === 0) {
+          return throwError(() => 'No se pudo conectar al servidor. Por favor, intenta de nuevo más tarde.');
+        }
+        if (error.status === 401) {
+          return throwError(() => 'Usuario o contraseña incorrectos');
+        }
+        const { success, error: errorMessage } = error.error;
+        console.log(errorMessage, 'error')
+
+        return throwError(() => errorMessage);
+      }),
+    );
+
+    return result;
+  }
 
   private runOnClient(): string | null {
     let token = null;
@@ -198,6 +263,7 @@ export class AuthService implements AfterViewInit {
 
     return true;
   }
+
 
 
 

@@ -7,6 +7,7 @@ export interface GanaderoModelTable {
   lastName?: string;
   phone?: string;
   departamento?: string;
+  idMarca?: string;
   municipio?: string;
   ubicacion?: string;
   urlImage?: string;

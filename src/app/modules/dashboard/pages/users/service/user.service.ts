@@ -51,12 +51,13 @@ export class UserService {
             console.log('service user error:', error);
             if (error.status === 0) {
               console.log('Error 0');
+               this.AuthService.onLogout().subscribe();
               return throwError(() => new Error('Error en el servidor'));
             }
             if (error.status === 403) {
               console.log('Error 403');
               this.AuthService.onLogout().subscribe();
-              return throwError(() => new Error(error.error));
+              return throwError(() => error);
             }
 
             return throwError(() => error);
@@ -78,7 +79,7 @@ export class UserService {
   public saveUser(user: UserRegistration): Observable<any> {
     console.log('save', user);
     return this.tokenService.getToken().pipe(
-
+      delay(3000), // Simular demora (si es necesario)
       switchMap(token => {
 
         if (token == null) {
@@ -103,10 +104,10 @@ export class UserService {
             console.log('service user error:', error);
             if (error.status === 0) {
               console.log('Error 0');
-              return throwError(() => new Error('Error en el servidor'));
+              return throwError(() => new Error(error));
             }
             if(error.status === 400){
-             return throwError(() => 'EL correo ya se encuentra registrado');
+             return throwError(() => error.error.error);
             }
             if (error.status === 403) {
               console.log('Error 403');

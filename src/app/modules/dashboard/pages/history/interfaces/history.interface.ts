@@ -23,7 +23,7 @@ export interface Session {
 
 export interface User {
   fullname?: string;
-  firtsName?: string;
+  firstName?: string;
   lastName?: string;
   email: string;
   roles: Role[];

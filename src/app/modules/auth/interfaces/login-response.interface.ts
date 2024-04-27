@@ -9,6 +9,7 @@ export interface LoginResponse {
   user:    User;
   token:   string;
   error?:  string;
+  status?: number;
 }
 
 
