@@ -12,7 +12,7 @@ const routes: Routes = [
       {
         path: '', // Ruta vacía para redireccionar a users
         pathMatch: 'full', // Se asegura de que la ruta vacía coincida exactamente
-        redirectTo: 'users', // Redirige a la ruta de usuarios por defecto
+        redirectTo: 'ganadero', // Redirige a la ruta de usuarios por defecto
       },
       {
         path: 'users',

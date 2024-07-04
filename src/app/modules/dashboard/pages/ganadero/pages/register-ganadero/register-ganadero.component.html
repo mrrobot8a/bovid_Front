@@ -25,7 +25,7 @@
               numeros
             </mat-error>
             <mat-error *ngIf="ganaderoForm.controls['identificacion'].errors?.['minlength']">
-              Identificacion debe contener al menos 10 digitos
+              Identificacion debe contener al menos 5 a 10 digitos
             </mat-error>
           </mat-form-field>
 
@@ -56,6 +56,8 @@
             <mat-error *ngIf="ganaderoForm.controls['phone'].errors?.['minlength']">
               Telefono debe contener al menos 10 digitos
             </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['identificacion']?.errors?.['required']">identificacion es
+              requerido</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Ubicacion</mat-label>
@@ -85,7 +87,7 @@
             <input matInput type="text" required formControlName="departamento" />
             <mat-error *ngIf="ganaderoForm.controls['departamento']?.errors?.['required']">dato requerido
             </mat-error>
-            <mat-error *ngIf="ganaderoForm.controls['departamento'].errors?.['pattern']">Nombres debe contener solo
+            <mat-error *ngIf="ganaderoForm.controls['departamento'].errors?.['pattern']"> solo
               letras
             </mat-error>
           </mat-form-field>

@@ -55,7 +55,7 @@ export class RegisterGanaderoComponent implements OnInit {
       // Añade la URL y el tamaño de la imagen al arreglo de imágenes
       if (fileSizeMB > 0.7) { // Verifica si el tamaño supera los 700 KB
         // Muestra un mensaje de error si el tamaño es mayor a 700 KB
-        this.snackbar.open('El tamaño de la imagen no puede superar los 700 MB.', 'Cerrar', {
+        this.snackbar.open('El tamaño de la imagen no puede superar los 700 KB.', 'Cerrar', {
           duration: 4000,
           verticalPosition: 'top',
         });
@@ -63,7 +63,7 @@ export class RegisterGanaderoComponent implements OnInit {
         event.target.value = null;
         return; // Sale del método sin agregar la imagen a la lista
       }
-      const size = `${fileSizeMB.toFixed(3)} MB`;
+      const size = `${fileSizeMB.toFixed(3)} KB`;
 
       this.fileNameImage = file.name;
       this.imageList.push({ url, size });
@@ -104,9 +104,9 @@ export class RegisterGanaderoComponent implements OnInit {
     idMarca:[''],
     firstName: ['', Validators.pattern('^[a-zA-Z ]*$')],
     lastName: ['', [Validators.pattern('^[a-zA-Z ]*$'), Validators.required]],
-    ubicacion: ['',[Validators.pattern('^[a-zA-Z ]*$'),Validators.required]],
+    ubicacion: ['',Validators.required],
     zona: ['', [Validators.required, Validators.pattern('^[0-9]*$')],],
-    identificacion: ['', [Validators.required, Validators.pattern('^[0-9]*$'),Validators.minLength(10)]],
+    identificacion: ['', [Validators.required, Validators.pattern('^[0-9]*$'),Validators.minLength(5),Validators.maxLength(10)]],
     phone: ['', Validators.minLength(10)],
     municipio: ['', Validators.pattern('^[a-zA-Z ]*$')],
     departamento: ['', Validators.pattern('^[a-zA-Z ]*$')],
@@ -288,6 +288,7 @@ export class RegisterGanaderoComponent implements OnInit {
               if (result) {
                 this.ganaderoForm.reset();
                 this.imageList = [];
+                this.listImageFile = [];
                 this.fileName = '';
                 this.fileNameImage = '';
 

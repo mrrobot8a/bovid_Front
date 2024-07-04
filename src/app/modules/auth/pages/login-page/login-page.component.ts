@@ -57,14 +57,16 @@ export class LoginPageComponent {
           });
           return;
         }
-        if (this.tieneRolUsuario(resp)) {
-          console.log('user', resp)
-          this.router.navigateByUrl('dashboard/users/list');
-        } else {
-          console.log('admin', resp)
-          this.router.navigateByUrl('dashboard/ganadero/list');
+        // if (this.tieneRolUsuario(resp)) {
+        //   console.log('user', resp)
+        //   this.router.navigateByUrl('dashboard/users/list');
+        // } else {
+        //   this.router.navigateByUrl('dashboard/ganadero/list');
+        //   console.log('admin', resp)
+        //   // localStorage.setItem('returnUrl', 'dashboard/ganadero/list');
+        //   // this.router.navigateByUrl('dashboard/ganadero/list');
 
-        }
+        // }
 
       },
       //capturamos el error que nos devuelve el observable throwError

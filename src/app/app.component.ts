@@ -80,10 +80,14 @@ export class AppComponent implements OnInit {
         if (this.router.url.includes('change-password')) {
           return;
         }
-        const returnUrl = localStorage.getItem('returnUrl');
+        const returnUrl  = localStorage.getItem('returnUrl');
         console.log('returnUrl:', returnUrl);
-        if (returnUrl === null) return;
-        localStorage.removeItem('returnUrl');
+        if (!returnUrl ) {
+          console.log('entro', returnUrl)
+          this.router.navigateByUrl('/dashboard');
+          return;
+        }
+        // localStorage.removeItem('returnUrl');
         this.router.navigateByUrl(returnUrl!);
         return;
       case AuthStatus.notAuthenticated:

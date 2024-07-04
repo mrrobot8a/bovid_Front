@@ -17,8 +17,9 @@ export const isNoAuthenticatedGuardTsGuard: CanActivateFn = (route, state) => {
   }
 
   if ( authService.authStatus() === AuthStatus.authenticated ) {
+    console.log('ruta actual:', router.url);
 
-    router.navigateByUrl('/dashboard');
+    // router.navigateByUrl('/dashboard');
     return false;
   }
 

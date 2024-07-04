@@ -25,7 +25,7 @@ export class GanaderoService {
           return of(false); // Manejo adecuado de la ausencia de token
         }
         // http://localhost:8000/admin/get-all-users
-        const url = `${this.baseUrl}/admin/ganadero/update-ganadero`;
+        const url = `${this.baseUrl}/user/ganadero/update-ganadero`;
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
@@ -70,7 +70,7 @@ export class GanaderoService {
           return of(false); // Manejo adecuado de la ausencia de token
         }
         // http://localhost:8000/admin/get-all-users
-        const url = `${this.baseUrl}/admin/ganadero/get-all-ganaderos?page=${page}&size=${size}`;
+        const url = `${this.baseUrl}/user/ganadero/get-all-ganaderos?page=${page}&size=${size}`;
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -115,7 +115,7 @@ export class GanaderoService {
           return of(false); // Manejo adecuado de la ausencia de token
         }
         // http://localhost:8000/admin/get-all-users
-        const url = `${this.baseUrl}/admin/ganadero/save-ganadero`;
+        const url = `${this.baseUrl}/user/ganadero/save-ganadero`;
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
@@ -158,7 +158,7 @@ export class GanaderoService {
           return of(false); // Manejo adecuado de la ausencia de token
         }
         // http://localhost:8000/admin/support-document/ver-pdf/fae65_ACOSTA DURAN YIMI GREGORIO.png
-        const url = `${this.baseUrl}/admin/support-document/ver-pdf/${name}`;
+        const url = `${this.baseUrl}/user/support-document/ver-pdf/${name}`;
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });

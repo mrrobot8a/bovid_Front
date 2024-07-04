@@ -1,10 +1,14 @@
 import { Injectable, Component } from '@angular/core';
 import Swal from 'sweetalert2';
-import './alert.component.css';
+
 
 
 @Injectable({
   providedIn: 'root'
+})
+@Component({
+  selector: 'app-alert',
+  template: '',
 })
 
 export class AlertService {
