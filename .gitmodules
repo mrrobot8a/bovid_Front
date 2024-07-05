@@ -1,3 +1,3 @@
 [submodule "src/app/shared/components/custom-sidenav"]
     path = src/app/shared/components/custom-sidenav
-	url = git@github.com:mrrobot8a/custom-sidenav-repo.git
+	url = https://github.com/mrrobot8a/custom-sidenav-repo.git
