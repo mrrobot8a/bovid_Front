@@ -25,22 +25,23 @@ import { Content, MarcasGanadera } from "../../interface/ganaderoResponsePage";
 
 export function mapToGanaderoModelTable(ganaderos: Content[]): GanaderoModelTable[] {
   const nuevosGanaderos: GanaderoModelTable[] = [];
+
   ganaderos.forEach(ganadero => {
-    if (ganadero.marcasGanadera!.length > 0) {
-      ganadero.marcasGanadera!.forEach((marca,index) => {
-       console.log('marca',ganadero.marcasGanadera![index].urlImage );
+    if (ganadero.marcasGanadera && ganadero.marcasGanadera.length > 0) {
+      ganadero.marcasGanadera.forEach((marca, index) => {
         const nuevoGanadero: GanaderoModelTable = {
           id: ganadero.id,
           identificacion: ganadero.identificacion,
           firstName: ganadero.firstName,
           lastName: ganadero.lastName,
           phone: ganadero.phone,
-          idMarca: ganadero.marcasGanadera![index].id,
-          departamento: ganadero.marcasGanadera![index].ubicacionList[0].nameDepartamento,
-          municipio: ganadero.marcasGanadera![index].ubicacionList[0].nameMunicipio,
-          ubicacion: ganadero.marcasGanadera![index].ubicacionList[0].direction,
-          urlImage: ganadero.marcasGanadera![index].urlImage,
-          zona: ganadero.marcasGanadera![index].ubicacionList[0].zona.codigoPostalCode // Supongo que la zona se mantiene igual para todas las marcas
+          idMarca: marca.id,
+          document: ganadero.supportDocument?.fileName,
+          departamento: marca.ubicacionList[0].nameDepartamento,
+          municipio: marca.ubicacionList[0].nameMunicipio,
+          ubicacion: marca.ubicacionList[0].direction,
+          urlImage: marca.urlImage,
+          zona: marca.ubicacionList[0].zona.codigoPostalCode.toString() // Supongo que la zona se mantiene igual para todas las marcas
         };
         nuevosGanaderos.push(nuevoGanadero);
       });
@@ -51,16 +52,16 @@ export function mapToGanaderoModelTable(ganaderos: Content[]): GanaderoModelTabl
         firstName: ganadero.firstName,
         lastName: ganadero.lastName,
         phone: ganadero.phone,
-        departamento: ganadero.marcasGanadera![0].ubicacionList[0].nameDepartamento,
-        municipio: ganadero.marcasGanadera![0].ubicacionList[0].nameMunicipio,
-        ubicacion: ganadero.marcasGanadera![0].ubicacionList[0].direction,
-        urlImage: ganadero.marcasGanadera![0].urlImage,
-        zona: ganadero.marcasGanadera![0].ubicacionList[0].zona.codigoPostalCode.toString()
+        document: ganadero.supportDocument?.fileName,
+        departamento: 'marca no asignada',
+        municipio: 'marca no asignada',
+        ubicacion: 'marca no asignada',
+        urlImage: 'marca no asignada',
+        zona: 'marca no asignada'
       };
       nuevosGanaderos.push(nuevoGanadero);
     }
   });
-
 
   // Ordenar por apellidos
   nuevosGanaderos.sort((a, b) => {
@@ -71,6 +72,6 @@ export function mapToGanaderoModelTable(ganaderos: Content[]): GanaderoModelTabl
     }
   });
 
-
   return nuevosGanaderos;
 }
+

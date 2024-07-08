@@ -1,6 +1,6 @@
 import { Content, MarcasGanadera, UbicacionList } from '../../interface/ganaderoResponsePage';
 
-export function mapToContent(jsonData: string): Content {
+export function mapToContent(jsonData: string,marcaEliminar?:{ marcaId?: string, isElimnado: boolean }[]): Content {
 
   const data: DataFormGandero = JSON.parse(jsonData);
 
@@ -27,6 +27,7 @@ export function mapToContent(jsonData: string): Content {
     description: data.ubicacion,
     etiqueta: '',
     urlImage: '',
+    isDeleted: marcaEliminar ? marcaEliminar.find(x => x.marcaId === data.idMarca)?.isElimnado ?? false : false,
     ubicacionList: ubicacionListArray,
   }
 

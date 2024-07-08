@@ -47,6 +47,7 @@ export interface MarcasGanadera {
   description: string;
   etiqueta: string;
   urlImage: string;
+  isDeleted?: boolean;
   ubicacionList: UbicacionList[];
 }
 

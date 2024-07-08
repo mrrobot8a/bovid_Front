@@ -252,6 +252,7 @@ export class AuthService implements AfterViewInit, OnInit {
 
   private _setAuthentication(user: User | null, token?: string, authStatus?: AuthStatus): boolean {
     console.log(authStatus, 'service');
+    console.log('user', user);
     this._currrentUser.set(user);
     this._authStatus.set(authStatus!);
 

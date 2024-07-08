@@ -1,0 +1,11 @@
+<button type="button" class="btn" [disabled]="disabled"  [ngClass]="{'pending': isPending, 'disabled-btn': disabled}" (click)="onClick()" matTooltip="Descargar archivo">
+  <span class="circle" >
+    <svg width="20" height="26" viewBox="0 0 20 26">
+      <path d="M1.5 16.5L10 24.5L18.5 16.5"></path>
+      <path d="M10 1.5V24"></path>
+    </svg>
+  </span>
+  <span class="progress" [ngClass]="{'active': isProgressActive}">
+   <mat-progress-bar mode="determinate"  [value]="downloadProgress" ></mat-progress-bar>
+  </span>
+</button>

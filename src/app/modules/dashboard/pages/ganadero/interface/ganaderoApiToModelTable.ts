@@ -11,6 +11,11 @@ export interface GanaderoModelTable {
   municipio?: string;
   ubicacion?: string;
   urlImage?: string;
+  document?: string;
   zona?: string
   marcasGanadera?: MarcasGanadera[];
+}
+
+export interface ErrorMessages {
+  [key: string]: string;
 }

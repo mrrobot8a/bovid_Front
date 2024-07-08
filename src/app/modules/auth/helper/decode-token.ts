@@ -16,10 +16,12 @@ export function mapTokenToUser(token: string): User {
   const tokenPayload = decodeToken(token);
   // Considerando que `roles` puede ser un string con múltiples roles separados por comas
   // Dividimos el string en un array y mapeamos cada valor a un objeto Role
-  const rolesArray: Role[] = tokenPayload.roles.split(",").map((roleName: string) => ({
+  const rolesArray: Role[] = tokenPayload.roles.split(" ").map((roleName: string) => ({
     status: true, // Asumiendo que cada rol está activo por defecto
     authority: roleName.trim(), // Usamos trim() para eliminar espacios en blanco antes o después del nombre del rol
   }));
+
+  console.log('roles', rolesArray);
 
   // Convertimos el objeto decodificado a tu interfaz User
   return {

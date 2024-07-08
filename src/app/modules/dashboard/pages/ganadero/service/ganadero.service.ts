@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../../../../../environments/enviroments';
 import { TokenService } from '../../../../../shared/util/token.service';
 import { AuthService } from '../../../../auth/services/auth.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, delay, map, of, switchMap, throwError } from 'rxjs';
 import { UserPegableResponse } from '../../users/interface';
 import { GanaderoResponsePageble } from '../interface/ganaderoResponsePage';
@@ -158,7 +158,7 @@ export class GanaderoService {
           return of(false); // Manejo adecuado de la ausencia de token
         }
         // http://localhost:8000/admin/support-document/ver-pdf/fae65_ACOSTA DURAN YIMI GREGORIO.png
-        const url = `${this.baseUrl}/user/support-document/ver-pdf/${name}`;
+        const url = `${this.baseUrl}/admin/support-document/ver-pdf/${name}`;
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${token}`
         });
@@ -231,4 +231,65 @@ export class GanaderoService {
       })
     )
   }
+
+
+
+
+  public downloadPDF(name: string): Observable<any> {
+    console.log('name:', name);
+
+    return this.tokenService.getToken().pipe(
+      switchMap(token => {
+        if (token == null) {
+          console.log('No token in localStorage');
+          this.AuthService.onLogout().subscribe();
+          return of(false); // Handle absence of token appropriately
+        }
+
+        const url = `http://localhost:8000/admin/support-document/ver-pdf/62cd14a2-c295-4ff7-ad53-a7bd1548ee0f_CEDULA JHON.pdf`;
+        const headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+
+        return this.httpClient.get(url, {
+          headers,
+          responseType: 'blob',
+          reportProgress: true, // Enable progress tracking
+          observe: 'events',
+        }).pipe(
+          map(event => {
+            console.log('Event type:', event);
+            if (event.type === HttpEventType.DownloadProgress) {
+              delay(1000)
+              const percentDone = Math.round((100 * event.loaded) / event.total!);
+              console.log(`Progreso de descarga: ${percentDone}%`);
+              return percentDone; // Devuelve el progreso actual
+            } else if (event instanceof HttpResponse) {
+              console.log('Archivo descargado:', event.headers.get('Content-Disposition'));
+              console.log('Archivo descargado:', event.body);
+              return event.body as Blob;
+             // Devuelve el Blob completo una vez completada la descarga
+            } else {
+              console.log('Tipo de evento no manejado:', event);
+              return null; // O maneja este caso según tu lógica
+            }
+          }),
+          catchError(error => {
+            console.error('Service error:', error);
+            if (error.status === 0) {
+              console.error('Server error');
+              return throwError(() => new Error('Server error'));
+            }
+            if (error.status === 403) {
+              console.error('Error 403');
+              // this.authService.onLogout().subscribe();
+              return throwError(() => new Error(error.error));
+            }
+            return throwError(() => new Error(error.error));
+          })
+        );
+      })
+    );
+  }
+
 }

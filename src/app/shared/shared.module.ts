@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { CustomTableComponent } from './components/Custom-table/Custom-table.component';
 import { LoadingpulsoComponent } from './loading/isLoadingPulso/loadingpulso/loadingpulso.component';
 import { ViewFileComponent } from './components/viewFile/viewFile.component';
+import { ButtonDownloadComponent } from './buttons/buttonDownload/buttonDownload.component';
 
 
 
@@ -18,15 +19,18 @@ import { ViewFileComponent } from './components/viewFile/viewFile.component';
 
 
 
+
   ],
   exports: [
     LoadingIndicatorComponent,
     Error404PageComponent,
     LoadingpulsoComponent,
     ViewFileComponent,
+    ButtonDownloadComponent,
   ],
   imports: [
-    CommonModule // Importa CommonModule aquí
+    CommonModule ,
+    ButtonDownloadComponent,// Importa CommonModule aquí
   ],
 })
 export class SharedModule { }

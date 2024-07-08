@@ -62,7 +62,12 @@
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Ubicacion</mat-label>
             <input matInput type="text" required formControlName="ubicacion" />
-            <mat-error *ngIf="ganaderoForm.controls['ubicacion']?.errors?.['required']">dato requerido
+
+
+            <mat-error *ngIf="ganaderoForm.get('ubicacion')?.errors">
+              {{ ganaderoForm.get('ubicacion')?.errors?.['required'] ? 'Dato equerido' : '' }}
+              {{ ganaderoForm.get('ubicacion')?.errors?.['pattern'] ? 'Solo letras' : '' }}
+              {{ ganaderoForm.get('ubicacion')?.errors?.['forbiddenMunicipio'] ? 'Digite Datos' : '' }}
             </mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
@@ -81,14 +86,18 @@
             <mat-error *ngIf="ganaderoForm.controls['municipio'].errors?.['pattern']">Nombres debe contener solo
               letras
             </mat-error>
+            <mat-error *ngIf="ganaderoForm.controls['municipio'].errors?.['forbiddenMunicipio']">Digite Datos
+            </mat-error>
+
           </mat-form-field>
+          <!--input departament-->
           <mat-form-field appearance="outline" class="col-12 sm:col-6">
             <mat-label>Departamento</mat-label>
-            <input matInput type="text" required formControlName="departamento" />
-            <mat-error *ngIf="ganaderoForm.controls['departamento']?.errors?.['required']">dato requerido
-            </mat-error>
-            <mat-error *ngIf="ganaderoForm.controls['departamento'].errors?.['pattern']"> solo
-              letras
+            <input matInput type="text" formControlName="departamento" required />
+            <mat-error *ngIf="ganaderoForm.get('departamento')?.errors">
+              <span *ngFor="let errorMessage of getErrorMessages()">
+                {{ errorMessage }}
+              </span>
             </mat-error>
           </mat-form-field>
 
@@ -100,7 +109,10 @@
           <div class="file-upload col-12 sm:col-6" [ngClass]="{'border-red': existeDocumento}">
 
 
-            {{fileName || "subir Documento Identidad .pdf"}} &nbsp;
+
+
+            <p style="margin-right: 10px;"> {{ fileName || "Subir Documento Identidad .pdf" }} </p>
+
 
             <button mat-mini-fab color="primary" type="button" class="upload-btn" (click)="fileUpload.click()">
               <mat-icon>attach_file</mat-icon>
@@ -108,6 +120,10 @@
             <p
               *ngIf="ganaderoForm.controls['documentFile'].errors?.['required'] && ganaderoForm.controls['documentFile'].touched">
               Archivo es requerido</p>
+            <app-button-download *ngIf="ganaderoForm.value.id" style="margin: 10px;"
+              [isProgressActive]="isProgressActive()" [isPending]="isPending()" [disabled]="disableButton()"
+              [downloadProgress]="progress()" (click)="downloadPDF()"></app-button-download>
+
           </div>
 
           <input type="file" [style]="" class="file-input" (change)="onImageSelected($event)" accept="image/png"
@@ -141,19 +157,23 @@
   <div class="col-12 sm:col-6 container-listImage">
     <mat-card>
       <mat-card-content>
+        @if (isLoadingResults() && ganaderoForm.value.id) {
+        <div style="display: flex; align-items: center; justify-content: center;"> <mat-spinner></mat-spinner></div>
+
+        }
         <!-- Muestra la lista de imágenes cargadas -->
         <div class="row">
           <div class="col-12">
-            <ng-container *ngIf="imageList.length > 0; else defaultTitle">
+            <ng-container *ngIf="imageList.length  > 0; else defaultTitle">
               <h3>Imágenes cargadas lista:</h3>
               <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center py-3"
-                  *ngFor="let image of imageList; let i = index">
-                  <div class="image-container" (click)="openImageModal(image.url)">
+                  *ngFor="let image of imageList; let i = index" (click) ="showImageData(image)">
+                  <div class="image-container" (click)="openImageModal(image.url!)">
                     <img [src]="image.url" alt="imagen" width="100" height="70">
                   </div>
                   <span>{{ image.size }}</span> <!-- Muestra el tamaño -->
-                  <button mat-icon-button type="button" color="warn" (click)="removeImage(i)">
+                  <button mat-icon-button type="button" color="warn" (click)="removeImage(i,{marcaId:image.marcaId})">
                     <mat-icon class="custom-icon-size">delete</mat-icon>
                   </button>
                 </li>
@@ -167,4 +187,8 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+
+
+
 </div>
